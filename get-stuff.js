@@ -52,13 +52,15 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
 }
 
 function getRawData() {
+    const sessionID = "Ji9g8gqkewM2131Z791667Z9iayowaE";
+
     const body = {
         "command": "getdatapointvalue",
-        "data": {"sessionID": "Ji9g8gqkewM2131Z791667Z9iayowaE", "uid": "all"}
+        "data": {"sessionID": sessionID, "uid": "all"}
     };
 
     const headers = {
-        "Cookie": "Intesis-Webserver={%22sessionID%22:%22Ji9g8gqkewM2131Z791667Z9iayowaE%22}'",
+        "Cookie": `Intesis-Webserver={%22sessionID%22:%22${sessionID}%22}'`,
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -82,14 +84,13 @@ async function go() {
     const signals = metaData.signals.uid;
 
     const rawData = await getRawData();
-    for(let item of rawData.data.dpval) {
+    for (let item of rawData.data.dpval) {
         // enrich the data here
         const meta = signals[item.uid.toString()];
         const name = meta ? meta[0] : "unknown";
         item.name = name;
         console.log(JSON.stringify(item, null, 2));
     }
-
 }
 
 go();
