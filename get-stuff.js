@@ -4,55 +4,63 @@
 const http = require('http');
 const zlib = require("zlib");
 
+const HOST = 'home.uph.am';
+const PORT = 4444;
+
 function makeRequest(method, body, host, path, port, headers = {}, cb) {
-    let postData;
-    if (method === "POST") {
-        postData = JSON.stringify(body);
-    }
-    if (method === "POST") {
-        headers["Content-Length"] = Buffer.byteLength(postData);
-    }
-
-    let buffer = [];
-
-    let request = http.request({
-        host: host,
-        path: path,
-        port: port,
-        method: method,
-        headers: headers
-    }, function (response) {
-        let encoding = response.headers["content-encoding"];
-        if (encoding === "gzip") {
-            let gunzip = zlib.createGunzip();
-            response.pipe(gunzip);
-
-            gunzip.on('data', function (data) {
-                buffer.push(data.toString())
-            }).on("end", function () {
-                cb(buffer.join(""));
-            }).on("error", function (e) {
-                console.error(e);
-            })
-        } else {
-            let reply = '';
-            response.on('data', function (chunk) {
-                reply += chunk;
-            });
-
-            response.on('end', function () {
-                return cb(reply);
-            });
+    return new Promise((resolve, reject) => {
+        let postData;
+        if (method === "POST") {
+            postData = JSON.stringify(body);
         }
-    });
+        if (method === "POST") {
+            headers["Content-Length"] = Buffer.byteLength(postData);
+        }
 
-    if (method === "POST") {
-        request.write(postData);
-    }
-    request.end();
+        let buffer = [];
+
+        let request = http.request({
+            host: host,
+            path: path,
+            port: port,
+            method: method,
+            headers: headers
+        }, function (response) {
+            let encoding = response.headers["content-encoding"];
+            if (encoding === "gzip") {
+                let gunzip = zlib.createGunzip();
+                response.pipe(gunzip);
+
+                gunzip.on('data', function (data) {
+                    buffer.push(data.toString())
+                }).on("end", function () {
+                    resolve(buffer.join(""));
+                }).on("error", function (e) {
+                    console.error(e);// todo: reject
+                });
+            } else {
+                let reply = '';
+                response.on('data', function (chunk) {
+                    reply += chunk;
+                });
+
+                response.on('end', function () {
+                    return resolve(reply);
+                });
+
+                // todo: reject errors
+            }
+        });
+
+        if (method === "POST") {
+            request.write(postData);
+        }
+
+        request.end();
+    });
 }
 
-function getRawData(sessionId) {
+async function getRawData(sessionId) {
     const body = {
         "command": "getdatapointvalue",
         "data": {"sessionID": sessionId, "uid": "all"}
@@ -63,29 +71,19 @@ function getRawData(sessionId) {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    return new Promise((resolve, reject) => {
-        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, (text) => {
-            resolve(JSON.parse(text))
-        });
-    });
+    const text = await makeRequest('POST', body, HOST, '/api.cgi', PORT, headers);
+    return JSON.parse(text);
 }
 
-function getMetaData() {
-    return new Promise((resolve, reject) => {
-        makeRequest('GET', undefined, 'home.uph.am', '/js/data/data.json', 4444, undefined, (text) => {
-            resolve(JSON.parse(text));
-        });
-    })
+async function getMetaData() {
+    const text = await makeRequest('GET', undefined, HOST, '/js/data/data.json', PORT, undefined)
+    return JSON.parse(text);
 }
 
-function login() {
+async function login() {
     const body = {"command": "login", "data": {"username": "admin", "password": "Bobsta"}};
-
-    return new Promise((resolve, reject) => {
-        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, {}, (text) => {
-            resolve(JSON.parse(text));
-        });
-    });
+    const text = await makeRequest('POST', body, HOST, '/api.cgi', PORT, {});
+    return JSON.parse(text);
 }
 
 async function go() {
@@ -99,9 +97,8 @@ async function go() {
     for (let item of rawData.data.dpval) {
         // enrich the data here
         const meta = signals[item.uid.toString()];
-        const name = meta ? meta[0] : "unknown";
-        item.name = name;
-        console.log(JSON.stringify(item, null, 2));
+        item.name = meta ? meta[0] : "unknown";
+        console.log(JSON.stringify(item));
     }
 }
 
