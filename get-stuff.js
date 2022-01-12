@@ -10,22 +10,15 @@ const PORT = 4444;
 function makeRequest(method, body, host, path, port, headers = {}, cb) {
     return new Promise((resolve, reject) => {
         let postData;
-        if (method === "POST") {
+
+        if (method === "POST" && body) {
             postData = JSON.stringify(body);
-        }
-        if (method === "POST") {
             headers["Content-Length"] = Buffer.byteLength(postData);
         }
 
-        let buffer = [];
+        const buffer = [];
 
-        let request = http.request({
-            host: host,
-            path: path,
-            port: port,
-            method: method,
-            headers: headers
-        }, function (response) {
+        const request = http.request({host, path, port, method, headers}, function (response) {
             let encoding = response.headers["content-encoding"];
             if (encoding === "gzip") {
                 let gunzip = zlib.createGunzip();
