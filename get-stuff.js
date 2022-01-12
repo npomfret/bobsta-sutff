@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-var http = require('http');
-var zlib = require("zlib");
+// only use standard stuff so we don't need npm
+const http = require('http');
+const zlib = require("zlib");
 
 function makeRequest(method, body, host, path, port, headers = {}, cb) {
     let postData;
@@ -12,9 +13,9 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
         headers["Content-Length"] = Buffer.byteLength(postData);
     }
 
-    var buffer = [];
+    let buffer = [];
 
-    var request = http.request({
+    let request = http.request({
         host: host,
         path: path,
         port: port,
@@ -81,11 +82,7 @@ function login() {
     const body = {"command": "login", "data": {"username": "admin", "password": "Bobsta"}};
 
     return new Promise((resolve, reject) => {
-        const headers = {
-            "Cookie": "Intesis-Webserver={%22sessionID%22:null}",
-            'Content-Type': 'application/json; charset=UTF-8',
-        };
-        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, (text) => {
+        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, {}, (text) => {
             resolve(JSON.parse(text));
         });
     });
