@@ -2,20 +2,20 @@
 
 var http = require('http');
 
-async function getStuff(cb) {
-
-    const postData = JSON.stringify({"command":"getdatapointvalue","data":{"sessionID":"i0Y2I0E8ddcWP78F3nwrpn5svt96xG8","uid":"all"}});
-
+function makeRequest(method, body, host, path, port, headers = {}, cb) {
+    let postData;
+    if (method === "POST") {
+        postData = JSON.stringify(body);
+    }
+    if (method === "POST") {
+        headers["Content-Length"] = Buffer.byteLength(postData);
+    }
     var request = http.request({
-        host: 'home.uph.am',
-        path: '/api.cgi',
-        port: 4444,
-        method: 'POST',
-        headers: {
-            "Cookie": "Intesis-Webserver={%22sessionID%22:%22i0Y2I0E8ddcWP78F3nwrpn5svt96xG8%22}'",
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(postData)
-        }
+        host: host,
+        path: path,
+        port: port,
+        method: method,
+        headers: headers
     }, function (response) {
         var reply = '';
         response.on('data', function (chunk) {
@@ -27,8 +27,24 @@ async function getStuff(cb) {
         });
     });
 
-    request.write(postData);
+    if (method === "POST") {
+        request.write(postData);
+    }
     request.end();
+}
+
+function getStuff(cb) {
+    const body = {
+        "command": "getdatapointvalue",
+        "data": {"sessionID": "Ji9g8gqkewM2131Z791667Z9iayowaE", "uid": "all"}
+    };
+
+    const headers = {
+        "Cookie": "Intesis-Webserver={%22sessionID%22:%22Ji9g8gqkewM2131Z791667Z9iayowaE%22}'",
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, cb);
 }
 
 getStuff(text => {
