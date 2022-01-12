@@ -51,16 +51,14 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
     request.end();
 }
 
-function getRawData() {
-    const sessionID = "Ji9g8gqkewM2131Z791667Z9iayowaE";
-
+function getRawData(sessionId) {
     const body = {
         "command": "getdatapointvalue",
-        "data": {"sessionID": sessionID, "uid": "all"}
+        "data": {"sessionID": sessionId, "uid": "all"}
     };
 
     const headers = {
-        "Cookie": `Intesis-Webserver={%22sessionID%22:%22${sessionID}%22}'`,
+        "Cookie": `Intesis-Webserver={%22sessionID%22:%22${sessionId}%22}'`,
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -79,11 +77,28 @@ function getMetaData() {
     })
 }
 
+function login() {
+    const body = {"command": "login", "data": {"username": "admin", "password": "Bobsta"}};
+
+    return new Promise((resolve, reject) => {
+        const headers = {
+            "Cookie": "Intesis-Webserver={%22sessionID%22:null}",
+            'Content-Type': 'application/json; charset=UTF-8',
+        };
+        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, (text) => {
+            resolve(JSON.parse(text));
+        });
+    });
+}
+
 async function go() {
+    const response = await login();
+    const sessionId = response.data.id.sessionID;
+
     const metaData = await getMetaData();
     const signals = metaData.signals.uid;
 
-    const rawData = await getRawData();
+    const rawData = await getRawData(sessionId);
     for (let item of rawData.data.dpval) {
         // enrich the data here
         const meta = signals[item.uid.toString()];
