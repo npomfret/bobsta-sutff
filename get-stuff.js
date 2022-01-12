@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var http = require('http');
+var zlib = require("zlib");
 
 function makeRequest(method, body, host, path, port, headers = {}, cb) {
     let postData;
@@ -10,6 +11,9 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
     if (method === "POST") {
         headers["Content-Length"] = Buffer.byteLength(postData);
     }
+
+    var buffer = [];
+
     var request = http.request({
         host: host,
         path: path,
@@ -17,14 +21,28 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
         method: method,
         headers: headers
     }, function (response) {
-        var reply = '';
-        response.on('data', function (chunk) {
-            reply += chunk;
-        });
+        let encoding = response.headers["content-encoding"];
+        if (encoding === "gzip") {
+            let gunzip = zlib.createGunzip();
+            response.pipe(gunzip);
 
-        response.on('end', function () {
-            return cb(reply);
-        });
+            gunzip.on('data', function (data) {
+                buffer.push(data.toString())
+            }).on("end", function () {
+                cb(buffer.join(""));
+            }).on("error", function (e) {
+                console.error(e);
+            })
+        } else {
+            let reply = '';
+            response.on('data', function (chunk) {
+                reply += chunk;
+            });
+
+            response.on('end', function () {
+                return cb(reply);
+            });
+        }
     });
 
     if (method === "POST") {
@@ -33,7 +51,7 @@ function makeRequest(method, body, host, path, port, headers = {}, cb) {
     request.end();
 }
 
-function getStuff(cb) {
+function getRawData() {
     const body = {
         "command": "getdatapointvalue",
         "data": {"sessionID": "Ji9g8gqkewM2131Z791667Z9iayowaE", "uid": "all"}
@@ -44,12 +62,34 @@ function getStuff(cb) {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, cb);
+    return new Promise((resolve, reject) => {
+        makeRequest('POST', body, 'home.uph.am', '/api.cgi', 4444, headers, (text) => {
+            resolve(JSON.parse(text))
+        });
+    });
 }
 
-getStuff(text => {
-    const data = JSON.parse(text);
-    // todo: get stuff from the data here
+function getMetaData() {
+    return new Promise((resolve, reject) => {
+        makeRequest('GET', undefined, 'home.uph.am', '/js/data/data.json', 4444, undefined, (text) => {
+            resolve(JSON.parse(text));
+        });
+    })
+}
 
-    console.log(JSON.stringify(data, null, 2));
-});
+async function go() {
+    const metaData = await getMetaData();
+    const signals = metaData.signals.uid;
+
+    const rawData = await getRawData();
+    for(let item of rawData.data.dpval) {
+        // enrich the data here
+        const meta = signals[item.uid.toString()];
+        const name = meta ? meta[0] : "unknown";
+        item.name = name;
+        console.log(JSON.stringify(item, null, 2));
+    }
+
+}
+
+go();
