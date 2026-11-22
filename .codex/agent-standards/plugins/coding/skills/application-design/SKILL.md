@@ -73,6 +73,7 @@ For example, a time-dependent operation can receive a clock or scheduler whose t
 - Hidden construction through default dependencies or property injection, and passing a general dependency container inward.
 - Reading configuration in behavior code or at module import time. The entry point reads and validates its explicitly supplied configuration files once into typed immutable configuration, then passes only the needed settings inward.
 - Copying an existing global-state pattern into new code. Removing existing state is separate work unless requested or necessary for the task.
+- A second implementation of a job an existing helper, wrapper, driver or module already does. Search every workspace by behaviour and by name, list its callers, and extend it; a parallel one needs the user's prior agreement with the reason recorded, and a claim that the existing one cannot be used must cite the checked source and callers.
 
 Immutable constants, stateless functions and deterministic value construction are allowed; service instances and runtime configuration are not constants. If a change would require new static application state, explain the missing construction boundary instead of adding a stopgap.
 

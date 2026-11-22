@@ -7,6 +7,7 @@ Use one committed task file for planned work, and for unplanned work whose probl
 
 Substantial work must have an accompanying, updated task file. An appropriate concise commit message identifies the change and its purpose. The task file can replace a detailed commit message by carrying the rationale, decisions, progress and verification evidence.
 
+- A task file records intent and evidence, not a decided design. Whoever implements it re-checks its claims about existing code, and treats any claim that justifies new code as a hypothesis to verify, before relying on them. Support such a claim with the checked source and callers.
 - Place `<slug>.md` in the nearest relevant `tasks/` folder. Keep existing useful naming/grouping conventions; other documentation belongs in `docs/`.
 - Start with the issue and why it matters. Add approaches, decisions, a plan, observable success criteria, evidence and remaining work as they become useful. Avoid empty headings and chronological diaries; revise the current account in place.
 - Update the task alongside its implementation. Mark work complete only after verification passes and its commits have landed on the default branch and been pushed; otherwise record the exact blocker.

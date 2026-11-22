@@ -27,7 +27,7 @@
     },
     ".codex/agent-standards/plugins/coding/.claude-plugin/plugin.json": {
       "source": "plugin:coding@npomfret/.claude-plugin/plugin.json",
-      "sha256": "ae8622c67451372d87da4880ce97d162cd4fe0d1d2a18c616649583604c7623a",
+      "sha256": "45af0a28feef1b7472d2ec9f6563f8f8a23c62688607f235155f5182db05d212",
       "link": false,
       "executable": false
     },
@@ -39,7 +39,7 @@
     },
     ".codex/agent-standards/plugins/coding/skills/application-design/SKILL.md": {
       "source": "plugin:coding@npomfret/skills/application-design/SKILL.md",
-      "sha256": "d63e81dd29062c99953fe9b869b79087b82df43f7456fb0df583e82a1109fded",
+      "sha256": "bdfd6fe90127938d4e050c308ce13bdfe99fe824239f1d1a2bf49f232fa0f911",
       "link": false,
       "executable": false
     },
@@ -93,25 +93,25 @@
     },
     ".codex/agent-standards/plugins/task-files/.claude-plugin/plugin.json": {
       "source": "plugin:task-files@npomfret/.claude-plugin/plugin.json",
-      "sha256": "92a578e5a0a76366c53c82eb044764f44d0173a8dff32a0b1043c486718a3652",
+      "sha256": "14a24b6f004780439c8270b512af201950ccd718e9091782d29bb2a82030fd3b",
       "link": false,
       "executable": false
     },
     ".codex/agent-standards/plugins/task-files/skills/task-files/SKILL.md": {
       "source": "plugin:task-files@npomfret/skills/task-files/SKILL.md",
-      "sha256": "ab81025a80c27ded6e6493004f4aeb3e79b147d192c8b6f33cd705b070cf375e",
+      "sha256": "70c1e4f329a434f07b58a4f04561732aed2f137fdb73093ec5fef5bc87d35929",
       "link": false,
       "executable": false
     },
     ".codex/agent-standards/plugins/testing/.claude-plugin/plugin.json": {
       "source": "plugin:testing@npomfret/.claude-plugin/plugin.json",
-      "sha256": "a9f73579dd04b9129bd35107725dee97c6a471c462ac81b3678ea128a0017868",
+      "sha256": "3578a70268ebd78cda8a702e18282fbd3f160c2729b02b3a929cd9b2a29b4b3e",
       "link": false,
       "executable": false
     },
     ".codex/agent-standards/plugins/testing/skills/test-design/SKILL.md": {
       "source": "plugin:testing@npomfret/skills/test-design/SKILL.md",
-      "sha256": "214e219468366bf1405fab85cf18f26ce0493a45ba90c8961fbc6e90303d839c",
+      "sha256": "1c8fa8215c0d6ab418e0a5eb4e5f16ec8a89bc2d7055c6bc722759e1eae8e20f",
       "link": false,
       "executable": false
     },
@@ -135,13 +135,13 @@
     },
     ".codex/agent-standards/plugins/workflow/.claude-plugin/plugin.json": {
       "source": "plugin:workflow@npomfret/.claude-plugin/plugin.json",
-      "sha256": "741f301075278ca2f7ed77c1ebf06e40b452534a967d6ef4bcc167b0a2cca89e",
+      "sha256": "37bdc4a0f9e59dd0bc6dadde0f19958ecb19c9f95e3e58522dee0cb9e25a295c",
       "link": false,
       "executable": false
     },
     ".codex/agent-standards/plugins/workflow/agents/change-reviewer.md": {
       "source": "plugin:workflow@npomfret/agents/change-reviewer.md",
-      "sha256": "28e9cd578b01407e5726a29f530790bc539ae323b4eb54c7b59e864f607744b5",
+      "sha256": "1f458000700a038001dc089496dd7eb23b5a83930deff191ddb8b7d385195479",
       "link": false,
       "executable": false
     },
@@ -153,7 +153,7 @@
     },
     ".codex/agent-standards/plugins/workflow/skills/review-changes/SKILL.md": {
       "source": "plugin:workflow@npomfret/skills/review-changes/SKILL.md",
-      "sha256": "80ff109f1f4b765e225b86e37ee6c95bebeaebb91de2417d446de71782ad696a",
+      "sha256": "503df573abd993d5797ef70d2cf4bf81c0a5921e718665748cd476b87b437102",
       "link": false,
       "executable": false
     },
@@ -171,7 +171,7 @@
     },
     ".codex/agents/change-reviewer.toml": {
       "source": "plugin:workflow@npomfret/agents/change-reviewer.md",
-      "sha256": "40d57e2b48b26d9d27b7d4275eac2fa01113ff8ae8f36399ab83081ead8aad33",
+      "sha256": "358f0db1b249e6d343fde0f569274fa7fa479837674569ec519097d8b71bcc38",
       "link": false,
       "executable": false
     },
@@ -183,7 +183,7 @@
     },
     ".codex/hooks.json": {
       "source": "templates/codex-hooks.py",
-      "sha256": "c7dc509a8b79e47e0ac1d0ee537f070e69dce0c459cceb736609e4c9fa88b2fa",
+      "sha256": "a483f85367402463d92960acf463a78836a75f0b881fb97049c70207dd218032",
       "link": false,
       "executable": false
     },
