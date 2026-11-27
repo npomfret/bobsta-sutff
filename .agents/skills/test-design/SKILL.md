@@ -5,7 +5,7 @@ description: Writing, changing or running automated tests. Use for adding covera
 
 # Test design
 
-Use short, explicit limits so slow or stalled work fails promptly. Run local builds and tests one at a time across agents, with one test worker; wait for any test run you control to finish before starting another.
+Use short, explicit limits so slow or stalled work fails promptly.
 
 - Protect meaningful behaviour with repeatable automated tests. Exercise rules, non-trivial construction, boundaries and state transitions. Straightforward assignments and forwarding need no dedicated tests. Keep tests fast and reliable so a failure is actionable.
 - Before writing or changing a test, read the nearest existing tests of the same type and subject. Reuse their builders, fakes, stubs, drivers, fixtures and assertion style, and extend those rather than writing local equivalents. Where they break a rule here (a fixed sleep, a private wait helper), follow the rule and name the departure.
